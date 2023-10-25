@@ -54,42 +54,57 @@ void drawejes()
 void setup()
 {
   Serial.begin(9600);
-  // Inicializar la pantalla OLED
+  // Inicializar la pantalla OLED con su respectiva dirección I2C
   pantalla.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  //se limpia la pantalla
   pantalla.clearDisplay();
+  //se establece el color del texto en la pantalla
   pantalla.setTextColor(SSD1306_WHITE);
+  //se establece el tamaño del texto a mostrarse en la pantalla
   pantalla.setTextSize(1);
 
-  // Inicializar el potenciómetro
+  // Se llama a la función que dibujará los ejes de coordenadas en la pantalla oled
   drawejes();
 }
-long xtime = millis();
 void loop()
 {
 
+  //se guarda en la variable sensorValue el valor leído por el pin de entrada analógico
   sensorValue = analogRead(potentiometerPin);
-
-  // Serial.println(sensorValue);
+  //se escala dicho valor a valores para que quede dentro del espacio de nuestro "plotter"
   y = map(sensorValue, 0, 4095, graphHeight+5, Yinit);
+  //se dibuja un rectángulo con el fondo negro para "borrar" lo previamente escrito 
+  //desde la posición 83,4 hasta 113,15 con un arco en las esquina de 1grados 
   pantalla.fillRoundRect(83, 4,30,11,1,SSD1306_BLACK);
+  //se setea el cursor en 85,6
   pantalla.setCursor(85, 6);
+  //se muestra el valor del dato leído analógico
   pantalla.print(sensorValue);
-  // Serial.println(y);
   //  Dibuja la lectura en la pantalla OLED
+  //se verifica que el primer dato sea cero para graficar solo un pixel de inicio
   if (prevY==0) pantalla.drawPixel(xinit, Yinit, SSD1306_WHITE);
+  //caso contrario se grafica una línea desde el valor X,Y anterior hasta el nuevo valor X,Y
   else pantalla.drawLine(prevX, prevY, xinit, y, SSD1306_WHITE);
+  //se refresca la pantalla
   pantalla.display();
+  //se establece que el valor anterior de Y sea el último leído
   prevY = y;
+  //se establece que el valor anterior de X sea el último leído
   prevX = xinit;
-
+  //se autmenta de 1 en 1 el valor de x para poder graficar
   xinit++;
+  //se verifica si el valor de x es mayor o igual al ancho máximo de mi "plotter"
   if (xinit >= graphWidth)
   {
+    //se pone el valor de x inicial en el valor establecido originalmente
     xinit = 4;
+    //se limpia la pantalla
     pantalla.clearDisplay();
+    //se llama a la función para volvera graficar los ejes
     drawejes();
+    //se establece el valor de prevY en cero
     prevY=0;
   }
-
+  //se establece el tiempo de espera entre una toma de datos y otra
   delay(sampleRate);
 }
