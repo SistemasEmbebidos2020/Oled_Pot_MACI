@@ -33,7 +33,7 @@ void drawejes()
   //se grafica una linea horizontal desde xinit,Yinit+35  hasta  xinit+105,Yinit+35 y se establece un color de línea blanca
   pantalla.drawLine(xinit, Yinit + 35, xinit+104, Yinit + 35, SSD1306_WHITE);
   //se fija el cursor en la pantalla en 4,5 conociendo que el máximo es 128,64 por la resolucion de la pantalla oled
-  pantalla.setCursor(4, 5);
+  pantalla.setCursor(6, 5);
   //se establece el tamaño del texto a escribri
   pantalla.setTextSize(1);
   //se escribe el texto en la posicion 4,5
