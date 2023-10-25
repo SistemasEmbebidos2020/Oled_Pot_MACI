@@ -58,7 +58,6 @@ void loop()
   if (prevY==0) pantalla.drawPixel(x, y, SSD1306_WHITE);
   else pantalla.drawLine(prevX, prevY, x, y, SSD1306_WHITE);
   pantalla.display();
-  pantalla.drawCircle(55,25,20);
   prevY = y;
   prevX = x;
 
